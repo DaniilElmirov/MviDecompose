@@ -3,44 +3,62 @@ package com.elmirov.mvidecompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.elmirov.mvidecompose.domain.entity.Contact
+import com.elmirov.mvidecompose.ui.content.AddContact
+import com.elmirov.mvidecompose.ui.content.Contacts
+import com.elmirov.mvidecompose.ui.content.EditContact
 import com.elmirov.mvidecompose.ui.theme.MviDecomposeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            var screen by remember {
+                mutableStateOf<Screen>(Screen.ContactList)
+            }
+
             MviDecomposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+                when (val currentScreen = screen) {
+                    Screen.AddContact -> {
+                        AddContact(
+                            onContactSaved = {
+                                screen = Screen.ContactList
+                            }
+                        )
+                    }
+
+                    Screen.ContactList -> {
+                        Contacts(
+                            onAddContactClick = {
+                                screen = Screen.AddContact
+                            },
+                            onContactClick = {
+                                screen = Screen.EditContact(it)
+                            }
+                        )
+                    }
+
+                    is Screen.EditContact -> {
+                        EditContact(
+                            contact = currentScreen.contact,
+                            onContactChanged = {
+                                screen = Screen.ContactList
+                            }
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+sealed interface Screen {
+    data object ContactList : Screen
+    data object AddContact : Screen
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MviDecomposeTheme {
-        Greeting("Android")
-    }
+    data class EditContact(val contact: Contact) : Screen
 }

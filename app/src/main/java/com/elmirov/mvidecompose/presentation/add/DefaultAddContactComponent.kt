@@ -1,17 +1,33 @@
 package com.elmirov.mvidecompose.presentation.add
 
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.statekeeper.consume
 import com.elmirov.mvidecompose.data.RepositoryImpl
 import com.elmirov.mvidecompose.domain.usecase.AddContactUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class DefaultAddContactComponent : AddContactComponent {
+class DefaultAddContactComponent(
+    componentContext: ComponentContext,
+) : AddContactComponent, ComponentContext by componentContext {
+
+    companion object {
+        private const val KEY = "DefaultAddContactComponent"
+    }
 
     private val repository = RepositoryImpl
     private val addContactUseCase = AddContactUseCase(repository)
 
-    private val _model = MutableStateFlow(AddContactComponent.Model(username = "", phone = ""))
+    init {
+        stateKeeper.register(key = KEY) {
+            model.value
+        }
+    }
+
+    private val _model = MutableStateFlow(
+        stateKeeper.consume(key = KEY) ?: AddContactComponent.Model(username = "", phone = "")
+    )
     override val model: StateFlow<AddContactComponent.Model>
         get() = _model.asStateFlow()
 

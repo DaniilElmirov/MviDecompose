@@ -1,6 +1,8 @@
 package com.elmirov.mvidecompose.presentation.edit
 
+import android.os.Parcelable
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.parcelize.Parcelize
 
 interface EditContactComponent {
     val model: StateFlow<Model>
@@ -11,8 +13,9 @@ interface EditContactComponent {
 
     fun onSaveContactClicked()
 
+    @Parcelize
     data class Model(
         val username: String,
         val phone: String,
-    )
+    ): Parcelable
 }

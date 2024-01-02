@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class DefaultAddContactComponent(
     componentContext: ComponentContext,
-) : AddContactComponent, ComponentContext by componentContext {
+    private val onContactSaved: () -> Unit,
+    ) : AddContactComponent, ComponentContext by componentContext {
 
     companion object {
         private const val KEY = "DefaultAddContactComponent"
@@ -42,5 +43,6 @@ class DefaultAddContactComponent(
     override fun onSaveContactClicked() {
         val (username, phone) = model.value
         addContactUseCase(username, phone)
+        onContactSaved()
     }
 }

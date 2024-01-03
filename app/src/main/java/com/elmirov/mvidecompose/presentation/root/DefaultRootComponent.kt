@@ -9,15 +9,13 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.elmirov.mvidecompose.domain.entity.Contact
-import com.elmirov.mvidecompose.presentation.add.AddContactComponent
 import com.elmirov.mvidecompose.presentation.add.DefaultAddContactComponent
 import com.elmirov.mvidecompose.presentation.edit.DefaultEditContactComponent
-import com.elmirov.mvidecompose.presentation.edit.EditContactComponent
-import com.elmirov.mvidecompose.presentation.list.ContactListComponent
 import com.elmirov.mvidecompose.presentation.list.DefaultContactListComponent
 import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.AddContact
 import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.ContactList
 import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.EditContact
+import com.elmirov.mvidecompose.presentation.root.RootComponent.Child
 import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(
@@ -26,7 +24,7 @@ class DefaultRootComponent(
 
     private val navigation = StackNavigation<Config>()
 
-    val stack: Value<ChildStack<Config, Child>> = childStack(
+    override val stack: Value<ChildStack<*, Child>> = childStack(
         source = navigation,
         initialConfiguration = ContactList,
         handleBackButton = true,
@@ -73,15 +71,7 @@ class DefaultRootComponent(
             }
         }
 
-    sealed interface Child {
-        class AddContact(val component: AddContactComponent) : Child
-
-        class ContactList(val component: ContactListComponent) : Child
-
-        class EditContact(val component: EditContactComponent) : Child
-    }
-
-    sealed interface Config : Parcelable {
+    private sealed interface Config : Parcelable {
         @Parcelize
         data object ContactList : Config
 

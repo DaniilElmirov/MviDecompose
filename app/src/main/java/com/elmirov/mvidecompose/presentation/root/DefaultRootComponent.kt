@@ -9,8 +9,11 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.elmirov.mvidecompose.domain.entity.Contact
+import com.elmirov.mvidecompose.presentation.add.AddContactComponent
 import com.elmirov.mvidecompose.presentation.add.DefaultAddContactComponent
 import com.elmirov.mvidecompose.presentation.edit.DefaultEditContactComponent
+import com.elmirov.mvidecompose.presentation.edit.EditContactComponent
+import com.elmirov.mvidecompose.presentation.list.ContactListComponent
 import com.elmirov.mvidecompose.presentation.list.DefaultContactListComponent
 import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.AddContact
 import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.ContactList
@@ -23,7 +26,7 @@ class DefaultRootComponent(
 
     private val navigation = StackNavigation<Config>()
 
-    val stack: Value<ChildStack<Config, ComponentContext>> = childStack(
+    val stack: Value<ChildStack<Config, Child>> = childStack(
         source = navigation,
         initialConfiguration = ContactList,
         handleBackButton = true,
@@ -33,33 +36,50 @@ class DefaultRootComponent(
     private fun child(
         config: Config,
         componentContext: ComponentContext,
-    ): ComponentContext =
+    ): Child =
         when (config) {
-            AddContact -> DefaultAddContactComponent(
-                componentContext = componentContext,
-                onContactSaved = {
-                    navigation.pop()
-                },
-            )
+            AddContact -> {
+                val component = DefaultAddContactComponent(
+                    componentContext = componentContext,
+                    onContactSaved = {
+                        navigation.pop()
+                    },
+                )
+                Child.AddContact(component = component)
+            }
 
-            ContactList -> DefaultContactListComponent(
-                componentContext = componentContext,
-                onAddContactRequest = {
-                    navigation.push(AddContact)
-                },
-                onEditingContactRequest = {
-                    navigation.push(EditContact(contact = it))
-                },
-            )
+            ContactList -> {
+                val component = DefaultContactListComponent(
+                    componentContext = componentContext,
+                    onAddContactRequest = {
+                        navigation.push(AddContact)
+                    },
+                    onEditingContactRequest = {
+                        navigation.push(EditContact(contact = it))
+                    },
+                )
+                Child.ContactList(component = component)
+            }
 
-            is EditContact -> DefaultEditContactComponent(
-                componentContext = componentContext,
-                contact = config.contact,
-                onContactSaved = {
-                    navigation.pop()
-                }
-            )
+            is EditContact -> {
+                val component = DefaultEditContactComponent(
+                    componentContext = componentContext,
+                    contact = config.contact,
+                    onContactSaved = {
+                        navigation.pop()
+                    }
+                )
+                Child.EditContact(component = component)
+            }
         }
+
+    sealed interface Child {
+        class AddContact(val component: AddContactComponent) : Child
+
+        class ContactList(val component: ContactListComponent) : Child
+
+        class EditContact(val component: EditContactComponent) : Child
+    }
 
     sealed interface Config : Parcelable {
         @Parcelize

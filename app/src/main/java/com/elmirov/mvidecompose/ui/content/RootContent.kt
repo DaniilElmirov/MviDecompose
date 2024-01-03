@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
-import com.elmirov.mvidecompose.presentation.add.AddContactComponent
-import com.elmirov.mvidecompose.presentation.edit.EditContactComponent
-import com.elmirov.mvidecompose.presentation.list.ContactListComponent
 import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent
+import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Child.*
 import com.elmirov.mvidecompose.ui.theme.MviDecomposeTheme
 
 @Composable
@@ -23,11 +21,11 @@ fun RootContent(
                 stack = component.stack,
             ) {
                 when (val instance = it.instance) {
-                    is ContactListComponent -> Contacts(component = instance)
+                    is AddContact -> AddContact(component = instance.component)
 
-                    is AddContactComponent -> AddContact(component = instance)
+                    is ContactList -> Contacts(component = instance.component)
 
-                    is EditContactComponent -> EditContact(component = instance)
+                    is EditContact -> EditContact(component = instance.component)
                 }
             }
         }

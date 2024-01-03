@@ -1,16 +1,13 @@
 package com.elmirov.mvidecompose.presentation.list
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.instancekeeper.InstanceKeeper
-import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.elmirov.mvidecompose.data.RepositoryImpl
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.elmirov.mvidecompose.domain.entity.Contact
-import com.elmirov.mvidecompose.domain.usecase.GetContactsUseCase
 import com.elmirov.mvidecompose.util.componentScope
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class DefaultContactListComponent(
     componentContext: ComponentContext,
@@ -18,30 +15,29 @@ class DefaultContactListComponent(
     val onAddContactRequest: () -> Unit,
 ) : ContactListComponent, ComponentContext by componentContext {
 
-    private val viewModel = instanceKeeper.getOrCreate { FakeViewModel() }
+    private lateinit var store: ContactListStore
 
-    private val repository = RepositoryImpl
-    private val getContactsUseCase = GetContactsUseCase(repository)
+    init {
+        componentScope().launch {
+            store.labels.collect {
+                when (it) {
+                    ContactListStore.Label.AddContact -> onAddContactRequest()
 
-    private val coroutineScope = componentScope()
+                    is ContactListStore.Label.EditContact -> onEditingContactRequest(it.contact)
+                }
+            }
+        }
+    }
 
-    override val model: StateFlow<ContactListComponent.Model> = getContactsUseCase()
-        .map { ContactListComponent.Model(it) }
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.Lazily,
-            initialValue = ContactListComponent.Model(listOf()),
-        )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val model: StateFlow<ContactListStore.State>
+        get() = store.stateFlow
 
     override fun onContactClicked(contact: Contact) {
-        onEditingContactRequest(contact)
+        store.accept(ContactListStore.Intent.SelectContact(contact = contact))
     }
 
     override fun onAddContactClick() {
-        onAddContactRequest()
+        store.accept(ContactListStore.Intent.AddContact)
     }
-}
-
-private class FakeViewModel() : InstanceKeeper.Instance {
-
 }

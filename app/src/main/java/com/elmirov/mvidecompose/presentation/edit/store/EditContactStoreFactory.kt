@@ -2,15 +2,17 @@ package com.elmirov.mvidecompose.presentation.edit.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.elmirov.mvidecompose.data.RepositoryImpl
 import com.elmirov.mvidecompose.domain.entity.Contact
 import com.elmirov.mvidecompose.domain.usecase.EditContactUseCase
 
-class EditContactStoreFactory(
-    private val storeFactory: StoreFactory,
-    private val editContactUseCase: EditContactUseCase,
-) {
+class EditContactStoreFactory {
+
+    private val storeFactory = DefaultStoreFactory()
+    private val repository = RepositoryImpl
+    private val editContactUseCase = EditContactUseCase(repository)
 
     fun create(contact: Contact): EditContactStore = object : EditContactStore,
         Store<EditContactStore.Intent, EditContactStore.State, EditContactStore.Label> by storeFactory.create(

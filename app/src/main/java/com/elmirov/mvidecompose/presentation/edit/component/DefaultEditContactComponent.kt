@@ -1,6 +1,7 @@
 package com.elmirov.mvidecompose.presentation.edit.component
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.elmirov.mvidecompose.domain.entity.Contact
@@ -17,8 +18,10 @@ class DefaultEditContactComponent(
     private val onContactSaved: () -> Unit,
 ) : EditContactComponent, ComponentContext by componentContext {
 
-    private val storeFactory = EditContactStoreFactory()
-    private val store = storeFactory.create(contact = contact)
+    private val store = instanceKeeper.getStore {
+        val storeFactory = EditContactStoreFactory()
+        storeFactory.create(contact = contact)
+    }
 
     init {
         componentScope().launch {

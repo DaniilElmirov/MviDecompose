@@ -16,7 +16,8 @@ decompose-compose = { group = "com.arkivanov.decompose", name = "extensions-comp
 mvikotlin = { group = "com.arkivanov.mvikotlin", name = "mvikotlin", version.ref = "mvikotlin-version" }
 mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvikotlin-version" }
 mvikotlin-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlin-version" }
+mvikotlin-logging = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-logging", version.ref = "mvikotlin-version" }
 
 [bundles]
 decompose = ["decompose", "decompose-compose"]
-mvikotlin = ["mvikotlin", "mvikotlin-main", "mvikotlin-coroutines"]
+mvikotlin = ["mvikotlin", "mvikotlin-main", "mvikotlin-coroutines", "mvikotlin-logging"]

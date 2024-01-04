@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.elmirov.mvidecompose.presentation.add.store.AddContactStore
+import com.elmirov.mvidecompose.presentation.add.store.AddContactStoreFactory
 import com.elmirov.mvidecompose.util.componentScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -14,12 +15,13 @@ class DefaultAddContactComponent(
     private val onContactSaved: () -> Unit,
 ) : AddContactComponent, ComponentContext by componentContext {
 
-    private lateinit var store: AddContactStore
+    private val storeFactory = AddContactStoreFactory()
+    private val store = storeFactory.create()
 
     init {
         componentScope().launch {
             store.labels.collect {
-                when(it) {
+                when (it) {
                     AddContactStore.Label.ContactSaved -> onContactSaved()
                 }
             }

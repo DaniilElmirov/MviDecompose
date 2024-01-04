@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.elmirov.mvidecompose.domain.entity.Contact
 import com.elmirov.mvidecompose.presentation.list.store.ContactListStore
+import com.elmirov.mvidecompose.presentation.list.store.ContactListStoreFactory
 import com.elmirov.mvidecompose.util.componentScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ class DefaultContactListComponent(
     val onAddContactRequest: () -> Unit,
 ) : ContactListComponent, ComponentContext by componentContext {
 
-    private lateinit var store: ContactListStore
+    private val storeFactory = ContactListStoreFactory()
+    private val store = storeFactory.create()
 
     init {
         componentScope().launch {

@@ -1,6 +1,7 @@
 package com.elmirov.mvidecompose.presentation.add.component
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.elmirov.mvidecompose.presentation.add.store.AddContactStore
@@ -15,8 +16,10 @@ class DefaultAddContactComponent(
     private val onContactSaved: () -> Unit,
 ) : AddContactComponent, ComponentContext by componentContext {
 
-    private val storeFactory = AddContactStoreFactory()
-    private val store = storeFactory.create()
+    private val store = instanceKeeper.getStore {
+        val storeFactory = AddContactStoreFactory()
+        storeFactory.create()
+    }
 
     init {
         componentScope().launch {

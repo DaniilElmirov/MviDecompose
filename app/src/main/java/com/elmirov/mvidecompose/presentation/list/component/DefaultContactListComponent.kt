@@ -1,6 +1,7 @@
 package com.elmirov.mvidecompose.presentation.list.component
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.elmirov.mvidecompose.domain.entity.Contact
@@ -17,8 +18,10 @@ class DefaultContactListComponent(
     val onAddContactRequest: () -> Unit,
 ) : ContactListComponent, ComponentContext by componentContext {
 
-    private val storeFactory = ContactListStoreFactory()
-    private val store = storeFactory.create()
+    private val store = instanceKeeper.getStore {
+        val storeFactory = ContactListStoreFactory()
+        storeFactory.create()
+    }
 
     init {
         componentScope().launch {

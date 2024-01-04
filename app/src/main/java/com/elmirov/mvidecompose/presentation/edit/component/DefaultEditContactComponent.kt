@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.elmirov.mvidecompose.domain.entity.Contact
 import com.elmirov.mvidecompose.presentation.edit.store.EditContactStore
+import com.elmirov.mvidecompose.presentation.edit.store.EditContactStoreFactory
 import com.elmirov.mvidecompose.util.componentScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -12,11 +13,12 @@ import kotlinx.coroutines.launch
 
 class DefaultEditContactComponent(
     componentContext: ComponentContext,
-    private val contact: Contact,
+    contact: Contact,
     private val onContactSaved: () -> Unit,
 ) : EditContactComponent, ComponentContext by componentContext {
 
-    private lateinit var store: EditContactStore
+    private val storeFactory = EditContactStoreFactory()
+    private val store = storeFactory.create(contact = contact)
 
     init {
         componentScope().launch {

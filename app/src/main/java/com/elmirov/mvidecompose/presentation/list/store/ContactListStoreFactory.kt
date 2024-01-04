@@ -2,17 +2,19 @@ package com.elmirov.mvidecompose.presentation.list.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.elmirov.mvidecompose.data.RepositoryImpl
 import com.elmirov.mvidecompose.domain.entity.Contact
 import com.elmirov.mvidecompose.domain.usecase.GetContactsUseCase
 import kotlinx.coroutines.launch
 
-class ContactListStoreFactory(
-    private val storeFactory: StoreFactory,
-    private val getContactsUseCase: GetContactsUseCase,
-) {
+class ContactListStoreFactory {
+
+    private val storeFactory = DefaultStoreFactory()
+    private val repository = RepositoryImpl
+    private val getContactsUseCase = GetContactsUseCase(repository)
 
     fun create(): ContactListStore = object : ContactListStore,
         Store<ContactListStore.Intent, ContactListStore.State, ContactListStore.Label> by storeFactory.create(

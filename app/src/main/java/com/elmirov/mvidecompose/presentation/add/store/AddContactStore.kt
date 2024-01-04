@@ -1,12 +1,11 @@
-package com.elmirov.mvidecompose.presentation.edit
+package com.elmirov.mvidecompose.presentation.add.store
 
 import com.arkivanov.mvikotlin.core.store.Store
 
-interface EditContactStore :
-    Store<EditContactStore.Intent, EditContactStore.State, EditContactStore.Label> {
+interface AddContactStore :
+    Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> {
 
     data class State(
-        val id: Int,
         val username: String,
         val phone: String,
     )

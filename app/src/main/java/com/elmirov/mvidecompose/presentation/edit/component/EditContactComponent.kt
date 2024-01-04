@@ -1,5 +1,6 @@
-package com.elmirov.mvidecompose.presentation.edit
+package com.elmirov.mvidecompose.presentation.edit.component
 
+import com.elmirov.mvidecompose.presentation.edit.store.EditContactStore
 import kotlinx.coroutines.flow.StateFlow
 
 interface EditContactComponent {

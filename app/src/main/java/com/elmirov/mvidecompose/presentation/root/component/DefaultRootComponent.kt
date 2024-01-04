@@ -1,4 +1,4 @@
-package com.elmirov.mvidecompose.presentation.root
+package com.elmirov.mvidecompose.presentation.root.component
 
 import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
@@ -9,13 +9,13 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.elmirov.mvidecompose.domain.entity.Contact
-import com.elmirov.mvidecompose.presentation.add.DefaultAddContactComponent
-import com.elmirov.mvidecompose.presentation.edit.DefaultEditContactComponent
-import com.elmirov.mvidecompose.presentation.list.DefaultContactListComponent
-import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.AddContact
-import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.ContactList
-import com.elmirov.mvidecompose.presentation.root.DefaultRootComponent.Config.EditContact
-import com.elmirov.mvidecompose.presentation.root.RootComponent.Child
+import com.elmirov.mvidecompose.presentation.add.component.DefaultAddContactComponent
+import com.elmirov.mvidecompose.presentation.edit.component.DefaultEditContactComponent
+import com.elmirov.mvidecompose.presentation.list.component.DefaultContactListComponent
+import com.elmirov.mvidecompose.presentation.root.component.DefaultRootComponent.Config.AddContact
+import com.elmirov.mvidecompose.presentation.root.component.DefaultRootComponent.Config.ContactList
+import com.elmirov.mvidecompose.presentation.root.component.DefaultRootComponent.Config.EditContact
+import com.elmirov.mvidecompose.presentation.root.component.RootComponent.Child
 import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(

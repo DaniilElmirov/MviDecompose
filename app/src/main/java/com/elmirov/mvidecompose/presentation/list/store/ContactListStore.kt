@@ -1,4 +1,4 @@
-package com.elmirov.mvidecompose.presentation.list
+package com.elmirov.mvidecompose.presentation.list.store
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.elmirov.mvidecompose.domain.entity.Contact

@@ -1,43 +1,46 @@
-package com.elmirov.mvidecompose.presentation.add
+package com.elmirov.mvidecompose.presentation.edit.component
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.elmirov.mvidecompose.domain.entity.Contact
+import com.elmirov.mvidecompose.presentation.edit.store.EditContactStore
 import com.elmirov.mvidecompose.util.componentScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DefaultAddContactComponent(
+class DefaultEditContactComponent(
     componentContext: ComponentContext,
+    private val contact: Contact,
     private val onContactSaved: () -> Unit,
-) : AddContactComponent, ComponentContext by componentContext {
+) : EditContactComponent, ComponentContext by componentContext {
 
-    private lateinit var store: AddContactStore
+    private lateinit var store: EditContactStore
 
     init {
         componentScope().launch {
             store.labels.collect {
-                when(it) {
-                    AddContactStore.Label.ContactSaved -> onContactSaved()
+                when (it) {
+                    EditContactStore.Label.ContactSaved -> onContactSaved()
                 }
             }
         }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val model: StateFlow<AddContactStore.State>
+    override val model: StateFlow<EditContactStore.State>
         get() = store.stateFlow
 
     override fun onUsernameChange(username: String) {
-        store.accept(AddContactStore.Intent.ChangeUsername(username))
+        store.accept(EditContactStore.Intent.ChangeUsername(username = username))
     }
 
     override fun onPhoneChange(phone: String) {
-        store.accept(AddContactStore.Intent.ChangePhone(phone))
+        store.accept(EditContactStore.Intent.ChangePhone(phone = phone))
     }
 
     override fun onSaveContactClicked() {
-        store.accept(AddContactStore.Intent.SaveContact)
+        store.accept(EditContactStore.Intent.SaveContact)
     }
 }

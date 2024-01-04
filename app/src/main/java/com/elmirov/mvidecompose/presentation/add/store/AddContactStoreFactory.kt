@@ -1,4 +1,4 @@
-package com.elmirov.mvidecompose.presentation.add
+package com.elmirov.mvidecompose.presentation.add.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store

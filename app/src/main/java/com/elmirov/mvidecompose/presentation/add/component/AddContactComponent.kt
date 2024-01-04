@@ -1,5 +1,6 @@
-package com.elmirov.mvidecompose.presentation.add
+package com.elmirov.mvidecompose.presentation.add.component
 
+import com.elmirov.mvidecompose.presentation.add.store.AddContactStore
 import kotlinx.coroutines.flow.StateFlow
 
 interface AddContactComponent {

@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
-import com.elmirov.mvidecompose.presentation.root.RootComponent
-import com.elmirov.mvidecompose.presentation.root.RootComponent.Child.*
+import com.elmirov.mvidecompose.presentation.root.component.RootComponent
+import com.elmirov.mvidecompose.presentation.root.component.RootComponent.Child.*
 import com.elmirov.mvidecompose.ui.theme.MviDecomposeTheme
 
 @Composable
